@@ -158,13 +158,27 @@ def tmdb_get(path):
     return r.json() if r.status_code == 200 else {}
 
 
+def is_anime(info):
+    """Japanese animation, or anything TMDB tags with an 'anime' keyword."""
+    animated = any(g.get("id") == 16 for g in info.get("genres") or [])
+    if animated and info.get("original_language") == "ja":
+        return True
+    kw = info.get("keywords") or {}
+    tags = kw.get("keywords") or kw.get("results") or []
+    return any("anime" in (k.get("name") or "").lower() for k in tags)
+
+
 def find_backdrop(items):
-    for it in items[:10]:
+    for it in items[:25]:
         tmdb_id = (it.get("id_map") or {}).get("tmdb")
         if not tmdb_id:
             continue
         kind = "tv" if it.get("type") == "show" else "movie"
-        path = tmdb_get(f"/{kind}/{tmdb_id}").get("backdrop_path")
+        info = tmdb_get(f"/{kind}/{tmdb_id}?append_to_response=keywords")
+        if is_anime(info):
+            print(f"   backdrop skipped (anime): {info.get('title') or info.get('name')}")
+            continue
+        path = info.get("backdrop_path")
         if path:
             r = requests.get(f"https://image.tmdb.org/t/p/w1280{path}", timeout=60)
             if r.status_code == 200:

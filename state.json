@@ -1,0 +1,40 @@
+{
+  "last_rotation": "2026-10-14T03:29:31+00:00",
+  "slots": [
+    {
+      "title": "Letterboxd's Top 500 Films",
+      "owner": "official",
+      "url": "https://letterboxd.com/official/list/letterboxds-top-500-films/",
+      "count": 500,
+      "mdblist_id": "227097"
+    },
+    {
+      "title": "sapphic horror",
+      "owner": "waltrautts",
+      "url": "https://letterboxd.com/waltrautts/list/sapphic-horror/",
+      "count": 28,
+      "mdblist_id": "227098"
+    },
+    {
+      "title": "girl stoner slacker epics",
+      "owner": "abbyjwright",
+      "url": "https://letterboxd.com/abbyjwright/list/girl-stoner-slacker-epics/",
+      "count": 51,
+      "mdblist_id": "227099"
+    },
+    {
+      "title": "Top 250 Horror Films",
+      "owner": "official",
+      "url": "https://letterboxd.com/official/list/top-250-horror-films/",
+      "count": 250,
+      "mdblist_id": "227100"
+    },
+    {
+      "title": "Top 250 Films with the Most Fans",
+      "owner": "official",
+      "url": "https://letterboxd.com/official/list/top-250-films-with-the-most-fans/",
+      "count": 250,
+      "mdblist_id": "227101"
+    }
+  ]
+}

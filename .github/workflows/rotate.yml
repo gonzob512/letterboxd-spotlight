@@ -1,0 +1,42 @@
+name: Rotate Letterboxd Spotlight
+
+on:
+  schedule:
+    - cron: "0 15 * * 1"   # every Monday ~8am Pacific; the script only rotates every 14 days
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "What to do"
+        type: choice
+        default: force
+        options:
+          - force
+          - rotate
+          - show-my-lists
+
+permissions:
+  contents: write
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests curl_cffi pillow
+      - name: Run spotlight
+        env:
+          MDBLIST_API_KEY: ${{ secrets.MDBLIST_API_KEY }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          MDBLIST_LIST_IDS: ${{ vars.MDBLIST_LIST_IDS }}
+          ROTATE_EVERY_DAYS: ${{ vars.ROTATE_EVERY_DAYS }}
+          EXCLUDE_WORDS: ${{ vars.EXCLUDE_WORDS }}
+        run: python spotlight.py ${{ github.event.inputs.mode || 'rotate' }}
+      - name: Save new covers
+        run: |
+          git config user.name "spotlight-bot"
+          git config user.email "spotlight-bot@users.noreply.github.com"
+          git add covers state.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "Rotate spotlight $(date -u +%F)" && git push)
